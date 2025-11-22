@@ -35,6 +35,9 @@ resource "google_cloud_run_v2_service" "dify_service" {
   location = var.region
   ingress  = var.cloud_run_ingress
   template {
+    annotations = {
+      "run.googleapis.com/cpu-throttling" = "false"
+    }
     service_account       = google_service_account.dify_service_account.email
     execution_environment = "EXECUTION_ENVIRONMENT_GEN2"
     containers {

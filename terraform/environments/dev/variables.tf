@@ -101,3 +101,57 @@ variable "min_instance_count" {
 variable "max_instance_count" {
   type = number
 }
+
+# URL settings
+variable "console_web_url" {
+  type = string
+}
+
+variable "console_api_url" {
+  type = string
+}
+
+variable "service_api_url" {
+  type = string
+}
+
+variable "app_web_url" {
+  type = string
+}
+
+variable "files_url" {
+  type = string
+}
+
+# SMTP / mail settings
+variable "mail_type" {
+  type = string
+}
+
+variable "mail_default_send_from" {
+  type = string
+}
+
+variable "smtp_server" {
+  type = string
+}
+
+variable "smtp_port" {
+  type = string
+}
+
+variable "smtp_username" {
+  type = string
+}
+
+variable "smtp_password" {
+  type = string
+}
+
+variable "smtp_use_tls" {
+  type = string
+}
+
+variable "smtp_opportunistic_tls" {
+  type = string
+}

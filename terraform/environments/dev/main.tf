@@ -1,38 +1,51 @@
 locals {
   shared_env_vars = {
-    "SECRET_KEY"                                 = var.secret_key
-    "LOG_LEVEL"                                  = "INFO"
-    "CONSOLE_WEB_URL"                            = ""
-    "CONSOLE_API_URL"                            = ""
-    "SERVICE_API_URL"                            = ""
-    "APP_WEB_URL"                                = ""
-    "CHECK_UPDATE_URL"                           = "https://updates.dify.ai"
-    "OPENAI_API_BASE"                            = "https://api.openai.com/v1"
-    "FILES_URL"                                  = ""
-    "MIGRATION_ENABLED"                          = "true"
-    "CELERY_BROKER_URL"                          = "redis://${module.redis.redis_host}:${module.redis.redis_port}/1"
-    "WEB_API_CORS_ALLOW_ORIGINS"                 = "*"
-    "CONSOLE_CORS_ALLOW_ORIGINS"                 = "*"
-    "DB_USERNAME"                                = var.db_username
-    "DB_PASSWORD"                                = var.db_password
-    "DB_HOST"                                    = module.cloudsql.cloudsql_internal_ip
-    "DB_PORT"                                    = var.db_port
-    "STORAGE_TYPE"                               = var.storage_type
-    "GOOGLE_STORAGE_BUCKET_NAME"                 = module.storage.storage_bucket_name
-    "GOOGLE_STORAGE_SERVICE_ACCOUNT_JSON_BASE64" = module.storage.storage_admin_key_base64
-    "REDIS_HOST"                                 = module.redis.redis_host
-    "REDIS_PORT"                                 = module.redis.redis_port
-    "VECTOR_STORE"                               = var.vector_store
-    "PGVECTOR_HOST"                              = module.cloudsql.cloudsql_internal_ip
-    "PGVECTOR_PORT"                              = "5432"
-    "PGVECTOR_USER"                              = var.db_username
-    "PGVECTOR_PASSWORD"                          = var.db_password
-    "PGVECTOR_DATABASE"                          = var.db_database
-    "CODE_EXECUTION_ENDPOINT"                    = module.cloudrun.dify_sandbox_url
-    "CODE_EXECUTION_API_KEY"                     = "dify-sandbox"
-    "INDEXING_MAX_SEGMENTATION_TOKENS_LENGTH"    = var.indexing_max_segmentation_tokens_length
-    "PLUGIN_DAEMON_KEY"                          = var.plugin_daemon_key
-    "PLUGIN_DIFY_INNER_API_KEY"                  = var.plugin_dify_inner_api_key
+    "SECRET_KEY"                              = var.secret_key
+    "LOG_LEVEL"                               = "DEBUG"
+    "CONSOLE_WEB_URL"                         = var.console_web_url
+    "CONSOLE_API_URL"                         = var.console_api_url
+    "SERVICE_API_URL"                         = var.service_api_url
+    "APP_WEB_URL"                             = var.app_web_url
+    "CHECK_UPDATE_URL"                        = "https://updates.dify.ai"
+    "OPENAI_API_BASE"                         = "https://api.openai.com/v1"
+    "FILES_URL"                               = var.files_url
+    "MIGRATION_ENABLED"                       = "true"
+    "CELERY_BROKER_URL"                       = "redis://${module.redis.redis_host}:${module.redis.redis_port}/1"
+    "WEB_API_CORS_ALLOW_ORIGINS"              = "*"
+    "CONSOLE_CORS_ALLOW_ORIGINS"              = "*"
+    "DB_USERNAME"                             = var.db_username
+    "DB_PASSWORD"                             = var.db_password
+    "DB_HOST"                                 = module.cloudsql.cloudsql_internal_ip
+    "DB_PORT"                                 = var.db_port
+    "STORAGE_TYPE"                            = var.storage_type
+    "GOOGLE_STORAGE_BUCKET_NAME"              = module.storage.storage_bucket_name
+    "REDIS_HOST"                              = module.redis.redis_host
+    "REDIS_PORT"                              = module.redis.redis_port
+    "VECTOR_STORE"                            = var.vector_store
+    "PGVECTOR_HOST"                           = module.cloudsql.cloudsql_internal_ip
+    "PGVECTOR_PORT"                           = "5432"
+    "PGVECTOR_USER"                           = var.db_username
+    "PGVECTOR_PASSWORD"                       = var.db_password
+    "PGVECTOR_DATABASE"                       = var.db_database
+    "CODE_EXECUTION_ENDPOINT"                 = module.cloudrun.dify_sandbox_url
+    "CODE_EXECUTION_API_KEY"                  = "dify-sandbox"
+    "INDEXING_MAX_SEGMENTATION_TOKENS_LENGTH" = var.indexing_max_segmentation_tokens_length
+    "PLUGIN_DAEMON_KEY"                       = var.plugin_daemon_key
+    "PLUGIN_DIFY_INNER_API_KEY"               = var.plugin_dify_inner_api_key
+    "SERVER_WORKER_CLASS"                     = "gthread"
+    "CELERY_WORKER_CLASS"                     = "gevent"
+    # Include priority queues so Celery workers consume priority_dataset /
+    # priority_generation tasks (otherwise they stay queued in Redis).
+    "CELERY_QUEUES"                           = "dataset,priority_dataset,generation,priority_generation,mail,ops_trace,app_deletion"
+    "RESTART_TRIGGER"                         = "20251121171600"
+    "MAIL_TYPE"                               = var.mail_type
+    "MAIL_DEFAULT_SEND_FROM"                  = var.mail_default_send_from
+    "SMTP_SERVER"                             = var.smtp_server
+    "SMTP_PORT"                               = var.smtp_port
+    "SMTP_USERNAME"                           = var.smtp_username
+    "SMTP_PASSWORD"                           = var.smtp_password
+    "SMTP_USE_TLS"                            = var.smtp_use_tls
+    "SMTP_OPPORTUNISTIC_TLS"                  = var.smtp_opportunistic_tls
   }
 }
 
@@ -142,6 +155,7 @@ locals {
     "vpcaccess.googleapis.com",
     "run.googleapis.com",
     "storage.googleapis.com",
+    "sqladmin.googleapis.com",
   ]
 }
 
