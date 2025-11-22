@@ -74,6 +74,7 @@ module "cloudrun" {
   shared_env_vars             = local.shared_env_vars
   min_instance_count          = var.min_instance_count
   max_instance_count          = var.max_instance_count
+  cloudsql_instance_connection_name = module.cloudsql.instance_connection_name
 
   depends_on = [google_project_service.enabled_services]
 }
@@ -163,4 +164,10 @@ resource "google_project_service" "enabled_services" {
   for_each = toset(local.services)
   project  = var.project_id
   service  = each.value
+}
+
+resource "google_storage_bucket_iam_member" "dify_service_storage_admin" {
+  bucket = module.storage.storage_bucket_name
+  role   = "roles/storage.admin"
+  member = "serviceAccount:${module.cloudrun.dify_service_account_email}"
 }

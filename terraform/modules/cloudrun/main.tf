@@ -36,7 +36,8 @@ resource "google_cloud_run_v2_service" "dify_service" {
   ingress  = var.cloud_run_ingress
   template {
     annotations = {
-      "run.googleapis.com/cpu-throttling" = "false"
+      "run.googleapis.com/cloudsql-instances" = var.cloudsql_instance_connection_name
+      "run.googleapis.com/cpu-throttling"     = "false"
     }
     service_account       = google_service_account.dify_service_account.email
     execution_environment = "EXECUTION_ENVIRONMENT_GEN2"

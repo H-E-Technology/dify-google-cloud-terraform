@@ -85,3 +85,7 @@ variable "min_instance_count" {
 variable "max_instance_count" {
   type = number
 }
+
+variable "cloudsql_instance_connection_name" {
+  type = string
+}
